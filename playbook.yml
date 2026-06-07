@@ -1,0 +1,40 @@
+---
+- name: Konfiguracja serwera WWW i Bazy Danych
+  hosts: all
+  become: true
+  tasks:
+    - name: Aktualizacja bazy pakietów i instalacja uslug (Petla)
+      apt:
+        name: "{{ item }}"
+        state: present
+        update_cache: yes
+      loop:
+        - apache2
+        - mariadb-server
+        - python3-mysqldb
+
+    - name: Uruchomienie uslugi Apache
+      service:
+        name: apache2
+        state: started
+        enabled: yes
+
+    - name: Uruchomienie uslugi MariaDB
+      service:
+        name: mariadb
+        state: started
+        enabled: yes
+
+    - name: Podmiana pliku index.html
+      copy:
+        src: ~/lab-ansible/files/index.html
+        dest: /var/www/html/index.html
+        owner: www-data
+        group: www-data
+        mode: '0644'
+
+    - name: Utworzenie bazy danych sklep_internetowy
+      mysql_db:
+        name: sklep_internetowy
+        state: present
+        login_unix_socket: /var/run/mysqld/mysqld.sock
