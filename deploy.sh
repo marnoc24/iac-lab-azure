@@ -8,7 +8,8 @@ echo "=== 2. Pobieranie IP maszyny wirtualnej ==="
 VM_IP=$(terraform output -raw vm_public_ip)
 
 echo "=== 3. Oczekiwanie na uruchomienie portu SSH ==="
-while ! nc -z -v -w5 $VM_IP 22; do
+# Poprawiona metoda sprawdzania portu bez użycia programu 'nc'
+while ! bash -c "echo > /dev/tcp/$VM_IP/22" 2>/dev/null; do
   echo "Maszyna sie uruchamia, ponowna proba za 5 sekund..."
   sleep 5
 done
