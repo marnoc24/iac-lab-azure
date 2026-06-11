@@ -12,23 +12,23 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    # 1. Pobranie Twojego kodu z repozytorium
     - name: Checkout Repo
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
-    # 2. Instalacja środowiska Terraform na serwerze GitHuba
     - name: Setup Terraform
-      uses: hashicorp/setup-terraform@v2
+      uses: hashicorp/setup-terraform@v3
 
-    # 3. Inicjalizacja (bez łączenia z chmurą)
     - name: Terraform Init
       run: terraform init -backend=false
 
-    # 4. Sprawdzenie, czy kod jest ładnie sformatowany
     - name: Terraform Format
       run: terraform fmt -check
       continue-on-error: true
 
-    # 5. Sprawdzenie poprawności składni (walidacja)
+    - name: Generate dummy SSH key for validation
+      run: |
+        mkdir -p ~/.ssh
+        ssh-keygen -t rsa -b 2048 -N "" -f ~/.ssh/id_rsa
+
     - name: Terraform Validate
       run: terraform validate
