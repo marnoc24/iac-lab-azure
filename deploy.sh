@@ -1,6 +1,9 @@
 #!/bin/bash
 set -e
 
+echo "=== 0. Inicjalizacja Terraform ==="
+terraform init -upgrade
+
 echo "=== 1. Uruchamianie Terraform ==="
 terraform apply -auto-approve
 
