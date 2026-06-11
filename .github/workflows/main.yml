@@ -32,3 +32,7 @@ jobs:
 
     - name: Terraform Validate
       run: terraform validate
+
+    # ---- NOWY KROK DLA ANSIBLE ----
+    - name: Sprawdzenie skladni Ansible
+      run: ansible-playbook --syntax-check playbook.yml
